@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <!-- 編碼與響應式設定 -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <!-- 頁面標題 -->
+  <title>名片 | 晨光音樂工作室</title>
+  
+  <!-- 載入思源黑體，確保中文顯示清晰 -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
+  
+  <!-- 載入名片樣式 -->
+  <link rel="stylesheet" href="./css/style.css">
+</head>
+<body>
+  <!-- 名片主容器，負責在畫面中置中 -->
+  <main class="business-card" id="businessCard">
+    
+    <!-- 名片左側：公司、姓名、職稱 -->
+    <header class="card-header">
+      <p class="company-name" id="companyName">服務單位</p>
+      <h1 class="person-name" id="personName">姓名</h1>
+      <p class="job-title" id="jobTitle">職稱</p>
+    </header>
+    
+    <!-- 名片右側：聯絡與服務資訊 -->
+    <div class="card-body">
+      
+      <!-- 聯絡資訊清單 -->
+      <ul class="contact-list" id="contactList">
+        <!-- JS 會動態產生聯絡項目 -->
+      </ul>
+      
+      <!-- 服務項目區塊 -->
+      <section class="services-section">
+        <h2 class="services-title">服務項目</h2>
+        <ul class="services-list" id="servicesList">
+          <!-- JS 會動態產生服務標籤 -->
+        </ul>
+      </section>
+    </div>
+    
+  </main>
+  
+  <!-- 載入名片腳本 -->
+  <script src="./js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,242 @@
+/* ============================================================
+   名片系統 - 單人名片完成品樣式（橫式黑色霧面顆粒版）
+   風格：簡約日式無印風格（Muji Style）
+   配色：頁面淺灰、名片黑色霧面、米白文字、低飽和綠與溫茶色
+   ============================================================ */
+
+/* 根變數：集中管理所有顏色，方便後續調整 */
+:root {
+  --color-page: #f0f0f0;        /* 頁面背景：淺灰，襯托黑色名片 */
+  --color-card: #141414;         /* 名片本體：接近純黑但帶一點暖灰 */
+  --color-card-warm: #181818;    /* 名片次要區域：略淺的黑色 */
+  --color-ink: #f5f2eb;          /* 主文字：米白，確保對比 */
+  --color-muted: #b8b4ad;        /* 次要文字：暖灰，維持可讀性 */
+  --color-primary: #9fb49f;        /* 霧苔綠：聯絡標籤與職稱強調 */
+  --color-accent: #c7b299;       /* 溫茶色：區塊標題與細節 */
+  --color-border: rgba(255, 255, 255, 0.12); /* 分隔線邊框 */
+  --color-tag-bg: rgba(255, 255, 255, 0.08); /* 服務標籤背景 */
+  --shadow-card: 0 20px 60px rgba(0, 0, 0, 0.25);
+}
+
+/* 全元素重置，統一盒模型 */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* 根元素字級基準 */
+html {
+  font-size: 16px;
+}
+
+/* 頁面主體：淺灰背景，讓黑色名片浮出 */
+body {
+  font-family: "Noto Sans TC", "Helvetica Neue", Arial, sans-serif;
+  color: var(--color-ink);
+  background-color: var(--color-page);
+  line-height: 1.7;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 24px;
+}
+
+/* 名片本體：黑色霧面紙張，橫式排版 */
+.business-card {
+  position: relative;
+  display: grid;
+  grid-template-columns: 2fr 3fr;
+  align-items: center;
+  width: 100%;
+  max-width: 760px;
+  min-height: 420px;
+  background-color: var(--color-card);
+  border-radius: 8px;
+  box-shadow: var(--shadow-card);
+  overflow: hidden;
+
+  /* 進場動畫：淡入並輕微上浮 */
+  opacity: 0;
+  transform: translateY(12px);
+  animation: card-enter 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* 紙張霧面紋路：使用 SVG 噪點濾鏡疊加，創造霧面顆粒感 */
+.business-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='4' seed='12' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  opacity: 0.18;
+  mix-blend-mode: overlay;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* 確保名片內所有內容位於紋路之上 */
+.business-card > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* 進場動畫關鍵幀 */
+@keyframes card-enter {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 名片左側：公司、姓名、職稱 */
+.card-header {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 10px;
+  height: 100%;
+  padding: 42px 36px 42px 44px;
+  background-color: rgba(255, 255, 255, 0.02);
+}
+
+/* 公司名稱：小字、大字間距 */
+.company-name {
+  font-size: 0.8rem;
+  font-weight: 400;
+  letter-spacing: 0.2em;
+  color: var(--color-muted);
+  margin-bottom: 4px;
+}
+
+/* 姓名：主要視覺焦點 */
+.person-name {
+  font-size: 2.4rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--color-ink);
+  line-height: 1.3;
+}
+
+/* 職稱：霧苔綠強調 */
+.job-title {
+  font-size: 1.05rem;
+  font-weight: 500;
+  color: var(--color-primary);
+  letter-spacing: 0.1em;
+  margin-top: 2px;
+}
+
+/* 名片右側：聯絡與服務 */
+.card-body {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 28px;
+  height: 100%;
+  padding: 42px 44px 42px 36px;
+  border-left: 1px solid var(--color-border);
+}
+
+/* 聯絡資訊清單 */
+.contact-list {
+  list-style: none;
+}
+
+/* 單一聯絡項目 */
+.contact-item {
+  display: grid;
+  grid-template-columns: 72px 1fr;
+  gap: 16px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--color-border);
+}
+
+/* 最後一列不加底線 */
+.contact-item:last-child {
+  border-bottom: none;
+}
+
+/* 聯絡標籤：英文標示 */
+.contact-label {
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  color: var(--color-primary);
+  display: flex;
+  align-items: center;
+}
+
+/* 聯絡內容 */
+.contact-value {
+  font-size: 0.95rem;
+  font-weight: 400;
+  color: var(--color-ink);
+  display: flex;
+  align-items: center;
+  word-break: break-all;
+}
+
+/* 服務項目標題 */
+.services-title {
+  font-size: 0.8rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  color: var(--color-accent);
+  margin-bottom: 12px;
+}
+
+/* 服務項目清單 */
+.services-list {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+/* 服務標籤 */
+.service-tag {
+  display: inline-block;
+  padding: 7px 16px;
+  font-size: 0.85rem;
+  color: var(--color-ink);
+  background-color: var(--color-tag-bg);
+  border: 1px solid var(--color-border);
+  border-radius: 20px;
+}
+
+/* 減少動畫：尊重系統偏好 */
+@media (prefers-reduced-motion: reduce) {
+  .business-card {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* 手機版：改為直式堆疊，避免橫式被壓扁 */
+@media (max-width: 680px) {
+  .business-card {
+    grid-template-columns: 1fr;
+    max-width: 460px;
+    min-height: auto;
+  }
+
+  .card-header {
+    padding: 32px 28px 24px;
+    align-items: flex-start;
+    text-align: left;
+  }
+
+  .card-body {
+    padding: 24px 28px 32px;
+    border-left: none;
+    border-top: 1px solid var(--color-border);
+  }
+
+  .person-name {
+    font-size: 2rem;
+  }
+}
