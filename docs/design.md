@@ -1,125 +1,135 @@
 # Design
 
 Digital business card for a music producer.  
-Style direction: quiet Japanese minimalism — warm paper, moss green, clean typography, no decorative noise.
+Style direction: dark, premium business card with subtle Japanese minimalism — black matte surface, single warm gold accent, geometric triangular grid pattern, restrained typography.
 
 ## Visual summary
 
-A single business card sits centered in the viewport. The page background is pure white, like a gallery wall; the card itself reads as a warm, unbleached paper object with soft shadow. The type is in a single humanist sans-serif family (Noto Sans TC) with weight and spacing providing hierarchy. Color is sparse: dark ink for text, moss green for the job title and service labels, warm umber for accents.
+A single horizontal business card sits centered in the viewport. The page background is light warm gray, like a concrete table; the card reads as black matte paper with a faint gold triangular grid and soft grain. The text is left-aligned, with name large and bold, job title in brass gold, and contact labels in the same gold. Color use is restrained: black, off-white text, one gold family, and muted labels.
 
 ## Color palette
 
-Palette strategy: **Restrained** — neutral architecture with one primary brand color and one warm accent.
+Palette strategy: **Committed / Restrained** — a near-black surface carries the card, with one warm metal accent used sparingly for hierarchy and pattern.
 
 ```css
 :root {
-  /* Page background: pure white gallery wall */
-  --color-page: oklch(1.000 0.000 0);
+  /* Page background: light warm gray, like a concrete display surface */
+  --color-page: #f0f0f0;
 
-  /* Card surface: warm unbleached paper, slightly darker than the page */
-  --color-paper: oklch(0.970 0.014 85);
+  /* Card surface: near-black matte */
+  --color-card: #141414;
 
-  /* Body text: very dark warm gray, >= 7:1 on pure white */
-  --color-ink: oklch(0.220 0.010 80);
+  /* Card gradient overlay: slightly lighter near edge for depth */
+  --color-card-warm: #181818;
+
+  /* Body text: warm off-white, high contrast on black */
+  --color-ink: #f5f2eb;
 
   /* Secondary text / labels: muted warm gray */
-  --color-muted: oklch(0.520 0.010 80);
+  --color-muted: #a8a59d;
 
-  /* Primary brand color: moss green */
-  --color-primary: oklch(0.580 0.130 150);
+  /* Primary brand color: brass gold, job title and contact labels */
+  --color-primary: #bfa37c;
 
-  /* Accent color: warm umber wood tone */
-  --color-accent: oklch(0.300 0.100 75);
+  /* Accent color: lighter soft gold, section headings */
+  --color-accent: #d4c5a9;
+
+  /* Geometric pattern lines and borders: same brass gold with transparency */
+  --color-gold: #bfa37c;
+  --color-border: rgba(191, 163, 124, 0.20);
+  --color-tag-bg: rgba(191, 163, 124, 0.10);
 }
 ```
 
+OKLCH design-token equivalents (for reference):
+
+- `--color-page`: `oklch(0.94 0.002 70)`
+- `--color-card`: `oklch(0.18 0.005 70)`
+- `--color-ink`: `oklch(0.96 0.012 85)`
+- `--color-muted`: `oklch(0.70 0.015 80)`
+- `--color-primary`: `oklch(0.70 0.100 78)`
+- `--color-accent`: `oklch(0.82 0.070 78)`
+
 ### Usage rules
 
-- Body text uses `--color-ink` on `--color-page` (or `--color-paper` for labels on the card).
-- Primary links and the job title use `--color-primary`.
-- Section labels for contact info use `--color-accent` as text; if used as a filled pill or badge, the text inside should be white due to the dark saturated fill.
-- Muted secondary text uses `--color-muted`.
+- Body text (`--color-ink`) sits directly on the black card and reaches > 15:1 contrast.
+- Primary labels and the job title use `--color-primary` (brass gold); against black it still exceeds 4.5:1.
+- Section headings use `--color-accent` (lighter gold); reserved for service-list category labels.
+- Muted secondary text uses `--color-muted`; only for the small company line and must remain readable.
+- Gold is the single accent family. It appears in the geometric grid, job title, labels, borders, and tag backgrounds.
 
 ## Typography
 
 - **Font family**: `Noto Sans TC`, with fallbacks `Helvetica Neue`, Arial, sans-serif.
-- **Font weights**: 300 (light, for large display headings if needed), 400 (body), 500 (subheadings), 700 (name).
+- **Font weights**: 300 (light, for delicate metadata if needed), 400 (body/contact values), 500 (subheadings/labels), 700 (name).
 - **Scale**:
-  - Page title / card name: 2.2rem / ~35px, weight 700, letter-spacing 0.12em
+  - Person name: 2.5rem / ~40px, weight 700, letter-spacing 0.12em
   - Company name: 0.8rem / ~13px, weight 400, letter-spacing 0.2em
-  - Job title: 1rem / ~16px, weight 500, letter-spacing 0.1em
+  - Job title: 1.05rem / ~17px, weight 500, letter-spacing 0.12em
   - Contact value: 0.95rem / ~15px, weight 400
   - Contact label: 0.7rem / ~11px, weight 500, letter-spacing 0.08em
   - Service tag: 0.85rem / ~14px, weight 400
-  - Section title: 0.8rem / ~13px, weight 500, letter-spacing 0.12em
-- Body line length is naturally constrained by the card width (max 460px), well under 75ch.
+  - Service section title: 0.8rem / ~13px, weight 500, letter-spacing 0.12em
+- All text is left-aligned within its column. The narrow card width keeps line length under 60ch.
 
 ## Layout
 
-- The card is centered in the viewport with flexbox on `body`.
-- Card max-width: 460px, taking 100% of viewport width minus padding on small screens.
-- Inside the card:
-  - **Header** (top zone): company name, person name, job title, centered, separated from body by a 1px hairline border.
-  - **Body** (bottom zone): contact list with label/value pairs in a two-column grid, followed by the services tag list.
+- The card is centered in the viewport using flexbox on `body`.
+- Card max-width: 760px; on phones it stacks vertically and narrows to 460px.
+- Inside the card (desktop):
+  - **Left column** (2fr): company name, person name, job title.
+  - **Right column** (3fr): contact list and service tags, separated by a thin gold-tinted vertical rule.
 - No nested cards; the page is a single surface.
-- Contact list uses CSS Grid (`76px 1fr`) to align labels and values cleanly.
+- Contact list uses CSS Grid (`72px 1fr`) to align labels and values.
 - Service tags use flex wrap with a 10px gap.
 
 ## Components
 
 ### Business card
 
-- Background: `--color-paper`
-- Border radius: 6px
-- Box shadow: `0 10px 40px rgba(34, 34, 34, 0.08)`
+- Background: `--color-card` (#141414)
+- Border radius: 10px
+- Box shadow: `0 24px 70px rgba(0, 0, 0, 0.30)`
 - Overflow hidden
+- Two texture layers via pseudo-elements:
+  1. `::before`: SVG fractal-noise grain at low opacity, blend mode `overlay`, for matte paper feel.
+  2. `::after`: CSS repeating-linear-gradient triangular grid in gold, blend mode `screen`, masked to be stronger on the right side.
 
 ### Card header
 
-- Padding: 42px 36px 30px
-- Background gradient from white to `--color-paper`
-- Border bottom: 1px solid neutral hairline
-- Text centered
+- Padding: 42px 36px 42px 44px (desktop); 32px 28px 24px (mobile)
+- Background: a subtle left-to-right gradient from opaque card color to semi-transparent, keeping the name fully legible over the geometric pattern.
 
-### Contact list item
+### Card body
 
-- Two-column grid
-- Bottom border: 1px solid `--color-paper` mixed with ink
-- Last item has no bottom border
+- Padding: 42px 44px 42px 36px (desktop); 24px 28px 32px (mobile)
+- Border-left: 1px solid `--color-border`
+- On mobile, border-left is removed and a top hairline border takes its place.
 
 ### Service tag
 
-- White background (`--color-page`)
-- 1px border, border-radius 20px
-- Padding 7px 16px
+- Background: `--color-tag-bg`
+- Border: 1px solid `--color-border`
+- Border radius: 20px
+- Padding: 7px 16px
 
 ## Motion
 
-- Keep motion minimal and purposeful.
-- Optional page-load: a single 300ms ease-out opacity + translateY(8px → 0) on the card.
-- Reduced-motion fallback: instant display, no transform.
-- No hover effects that change layout; links may have a subtle opacity shift only.
-
-```css
-@media (prefers-reduced-motion: reduce) {
-  * {
-    animation: none !important;
-    transition: none !important;
-  }
-}
-```
+- A single, short page-load entrance: the card fades in and rises 12px over 0.6s using `cubic-bezier(0.16, 1, 0.3, 1)`.
+- No continuous animations, no hover transforms that change layout.
+- Reduced-motion fallback disables the entrance entirely.
 
 ## Responsive behavior
 
-- Below 480px: reduce padding on card header/body; shrink name to 1.8rem; contact label column narrows to 64px.
-- Card always stays within the viewport with `max-width: 100%` and safe padding.
+- Below 680px: the card switches to a single-column vertical stack. The geometric pattern mask flips from a left-to-right fade to a top-to-bottom fade, so the stacked text area stays clean.
+- Card width becomes `max-width: 460px` and `min-height` is removed.
+- Name scales down to 2rem on mobile.
 
 ## Current implementation notes
 
-- The business card surface is now **black** (#141414) with a subtle warm charcoal second tone.
-- The card is **horizontal**: CSS Grid splits it into a left identity column and a right contact/services column on desktop, then stacks vertically on screens narrower than 680px.
-- Paper texture is rendered with an SVG `feTurbulence` noise filter overlaid at low opacity in `overlay` blend mode, producing a matte, grainy paper feel visible on dark surfaces.
-- Type colors were inverted for dark mode: `--color-ink` is warm off-white for primary text, `--color-primary` is a muted moss green, and `--color-accent` is warm umber for labels.
-- The page background is `oklch(0.94 0.005 0)` (very light warm gray) so the black card floats cleanly.
-- A short `card-enter` fade-in animation is included; it is disabled under `prefers-reduced-motion: reduce`.
-- Responsive breakpoint at 680px flips the layout to vertical stacking for phones.
+- The current `src/css/style.css` implements this black-and-gold system.
+- The page background is light warm gray (`#f0f0f0`); the card surface is near-black (`#141414`).
+- The geometric pattern is built purely with CSS `repeating-linear-gradient` lines at 60°, -60°, and 0°, colored in a semi-transparent brass gold and blended with `screen`.
+- A CSS mask fades the geometric pattern so it is densest on the right side and almost disappears under the left text column.
+- Paper grain is still provided by an SVG `feTurbulence` noise layer, keeping the black surface from feeling flat and plastic.
+- `src/js/main.js` loads the card content from local sample data and does not auto-call the API.

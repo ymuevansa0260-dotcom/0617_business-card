@@ -1,7 +1,7 @@
 /**
  * 名片系統 - 單人名片完成品腳本
- * 功能：定義範本資料、渲染名片內容、預備 API 格式工具
- * 說明：本頁面為給訪客觀看的靜態名片範例，目前不會呼叫任何 API。
+ * 功能：定義範本資料、渲染名片內容、提供 API 格式與呼叫工具
+ * 說明：API 網址與動作參數統一從 src/config/api.json 讀取；頁面載入時不會自動呼叫 API。
  */
 
 // ============================================================
@@ -137,6 +137,53 @@ function prepareApiPayload(data, action) {
     taxId: data.taxId,
     fax: data.fax
   };
+}
+
+/**
+ * 載入 API 設定檔
+ * 用途：從 src/config/api.json 讀取 API 網址與動作參數
+ * 使用方法：
+ *   const config = await loadApiConfig();
+ *   console.log(config.url);
+ */
+async function loadApiConfig() {
+  const response = await fetch("./config/api.json");
+  if (!response.ok) {
+    throw new Error(`無法載入 API 設定檔：HTTP ${response.status}`);
+  }
+  return response.json();
+}
+
+/**
+ * 呼叫名片 API
+ * 用途：根據動作（read / update）向設定檔中的網址送出 POST 請求
+ * 使用方法：
+ *   await fetchCard("read");
+ *   await fetchCard("update", businessCardData);
+ */
+async function fetchCard(action, cardData) {
+  if (action !== "read" && action !== "update") {
+    console.warn("fetchCard: action 必須為 read 或 update");
+    return;
+  }
+
+  const config = await loadApiConfig();
+  const payload =
+    action === "read"
+      ? { action: config.readAction }
+      : prepareApiPayload(cardData, config.updateAction);
+
+  const response = await fetch(config.url, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload)
+  });
+
+  if (!response.ok) {
+    throw new Error(`API 請求失敗：HTTP ${response.status}`);
+  }
+
+  return response.json();
 }
 
 // ============================================================
